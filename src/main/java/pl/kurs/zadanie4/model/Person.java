@@ -1,6 +1,6 @@
 package pl.kurs.zadanie4.model;
 
-public class Person{
+public class Person {
     private String firstName;
     private String lastName;
     private String city;

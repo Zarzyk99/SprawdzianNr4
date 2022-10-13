@@ -24,12 +24,12 @@ public class UserRunner {
         String pesel = input.nextLine();
         Optional<String> peselOptional = Optional.of(pesel);
 
-        if (peselOptional.isPresent()){
-            if (peselOptional.get().length() == 11){
+        if (peselOptional.isPresent()) {
+            if (peselOptional.get().length() == 11) {
                 pesel = pesel.substring(0, 6);
                 LocalDate birthDate = LocalDate.parse(pesel, DateTimeFormatter.ofPattern("yyMMdd"));
                 System.out.println("Twoja data urodzenia " + birthDate);
-            }else try {
+            } else try {
                 throw new InvalidPeselException("Podany pesel jest nieprawidłowy");
             } catch (InvalidPeselException e) {
                 e.printStackTrace();
