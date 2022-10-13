@@ -9,9 +9,9 @@ import java.util.Scanner;
 
 public class UserRunner {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         System.out.println("Podaj swoje imię");
-        String name = scanner.nextLine();
+        String name = input.nextLine();
         Optional<String> nameOptional = Optional.of(name);
 
         if (nameOptional.isPresent()) {
@@ -21,7 +21,7 @@ public class UserRunner {
         } else System.out.println("0");
 
         System.out.println("Podaj pesel");
-        String pesel = scanner.nextLine();
+        String pesel = input.nextLine();
         Optional<String> peselOptional = Optional.of(pesel);
 
         if (peselOptional.isPresent()){
