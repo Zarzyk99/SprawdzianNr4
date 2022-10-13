@@ -18,7 +18,6 @@ public class Runner {
         if (birth.isAfter(LocalDate.now())) throw new InvalidBirthDateException();
         System.out.println("Twoja data urodzenia " + birth);
 
-//        LocalDate birth = LocalDate.of(1999, 11, 17);
         LocalDate currentDate = LocalDate.now();
         Period diff = birth.until(currentDate);
         LocalDateTime dateOfBirth = LocalDateTime.of(birth, LocalTime.now());
