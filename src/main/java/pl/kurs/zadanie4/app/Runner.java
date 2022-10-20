@@ -14,7 +14,7 @@ public class Runner {
                 new Person("Dominika", "Nowak", "Warszawa", 17),
                 new Person("Tomek", "Wtorek", "Katowice", 24),
                 new Person("Marcin", "Krawiec", "Warszawa", 43),
-                new Person("Agnieszka", "Bąk", "Wrocław", 16),
+                new Person("Agnieszka", "Bąk", null, 16),
                 new Person("Adrian", "Brak", "Warszawa", 35)
         );
 
@@ -22,7 +22,7 @@ public class Runner {
         System.out.println(PersonService.getAverageAge(personList));
         System.out.println(PersonService.getAverageAgeOfMen(personList));
         System.out.println(PersonService.getAverageAgeOfWomen(personList));
-        System.out.println(PersonService.getAverageAgeOfSex(personList, "male"));
+        System.out.println(PersonService.getAverageAgeOfSexByPredicate(personList, x -> x.getFirstName().endsWith("a")));
         System.out.println(PersonService.getCityWithTheMostPeople(personList));
         System.out.println(PersonService.getCities(personList));
     }

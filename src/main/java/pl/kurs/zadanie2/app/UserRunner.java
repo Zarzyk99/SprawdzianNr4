@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class UserRunner {
     public static void main(String[] args) throws InvalidPeselException {
@@ -14,34 +16,40 @@ public class UserRunner {
         System.out.println("Podaj swoje imię");
         String name = input.nextLine();
 
-        Integer nameLength = Optional.of(name)
-                .map(String::length)
-                .orElse(0);
-
-        System.out.println("Długość imienia " + nameLength);
+        Optional<String> nameOptional = Optional.of(name);
+        nameOptional.ifPresentOrElse(n -> System.out.println("Długość imienia " + n.length()), () -> System.out.println("0"));
 
         System.out.println("Podaj pesel");
-        String inputPesel = input.nextLine();
+        String peselInput = input.nextLine();
 
-        String pesel = Optional.of(inputPesel)
-                .orElseThrow(() -> new InvalidPeselException("Podany pesel jest nieprawidłowy"));
 
-        if (pesel.length() < 6) throw new InvalidPeselException("Podany pesel jest nieprawidłowy");
-        pesel = pesel.substring(0, 6);
+        String pesel = Optional.ofNullable(peselInput)
+                .filter(x -> x.length() == 11)
+                .orElseThrow(() -> new InvalidPeselException("Podano błędny pesel"))
+                .substring(0, 6);
 
-        try {
-            int year = Integer.parseInt(pesel.substring(0, 2)) + 2000;
+        LocalDate birthDate = Stream.of(pesel)
+                .map((p) -> {
+                    int year = Integer.parseInt(p.substring(0, 2)) + 2000;
 
-            if (year > Calendar.getInstance().get(Calendar.YEAR)) {
-                year -= 100;
-            }
+                    if (year > Calendar.getInstance().get(Calendar.YEAR)) {
+                        year -= 100;
+                    }
 
-            String newPesel = year + pesel.substring(2, 6);
+                    String newPesel = year + p.substring(2, 6);
 
-            LocalDate birthDate = LocalDate.parse(newPesel, DateTimeFormatter.ofPattern("yyyyMMdd"));
-            System.out.println("Twoja data urodzenia " + birthDate);
-        } catch (Exception e) {
-            throw e;
-        }
+                    try {
+
+                        return LocalDate.parse(newPesel, DateTimeFormatter.ofPattern("yyyyMMdd"));
+                    } catch (Exception e) {
+                        return LocalDate.now();
+                    }
+
+                })
+                .collect(Collectors.toList())
+                .get(0);
+        System.out.println("Twoja data urodzenia" + birthDate);
+
+
     }
 }

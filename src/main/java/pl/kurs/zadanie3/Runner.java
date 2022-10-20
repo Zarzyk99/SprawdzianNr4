@@ -2,7 +2,7 @@ package pl.kurs.zadanie3;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -24,6 +24,7 @@ public class Runner {
     }
 
     private static List<Integer> getTheBiggest5Elements(List<Integer> integers) {
+        Objects.requireNonNull(integers);
 
         if (integers.size() < 5) return List.of();
 

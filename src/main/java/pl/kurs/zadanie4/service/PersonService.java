@@ -4,6 +4,7 @@ import pl.kurs.zadanie4.exception.NoWomenException;
 import pl.kurs.zadanie4.model.Person;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class PersonService {
@@ -13,6 +14,7 @@ public class PersonService {
 
         return personList.stream()
                 .filter(Objects::nonNull)
+                .filter(Person.requireNonNull)
                 .filter(person -> person.getFirstName().endsWith("a"))
                 .max(Comparator.comparingInt(Person::getAge))
                 .orElseThrow(() -> new NoWomenException("Nie znaleziono kobiet na liście"));
@@ -24,6 +26,7 @@ public class PersonService {
         return personList.stream()
 
                 .filter(Objects::nonNull)
+                .filter(Person.requireNonNull)
                 .collect(Collectors.averagingInt(Person::getAge));
     }
 
@@ -32,6 +35,7 @@ public class PersonService {
 
         return personList.stream()
                 .filter(Objects::nonNull)
+                .filter(Person.requireNonNull)
                 .filter(person -> !person.getFirstName().endsWith("a"))
                 .collect(Collectors.averagingInt(Person::getAge));
     }
@@ -41,18 +45,21 @@ public class PersonService {
 
         return personList.stream()
                 .filter(Objects::nonNull)
+                .filter(Person.requireNonNull)
                 .filter(person -> person.getFirstName().endsWith("a"))
                 .collect(Collectors.averagingInt(Person::getAge));
     }
 
-    public static Double getAverageAgeOfSex(List<Person> personList, String sex) {
-        Objects.requireNonNull(personList);
+    public static double getAverageAgeOfSexByPredicate(List<Person> personList, Predicate<Person> predicate) {
 
-        if (sex.equals("male")) {
-            return getAverageAgeOfMen(personList);
-        } else if (sex.equals("female")) {
-            return getAverageAgeOfWomen(personList);
-        } else throw new UnsupportedOperationException();
+        return Optional.ofNullable(personList)
+                .orElseGet(Collections::emptyList).stream()
+                .filter(Objects::nonNull)
+                .filter(Person.requireNonNull)
+                .filter(predicate)
+                .mapToDouble(Person::getAge).average()
+                .orElse(0);
+
     }
 
     public static String getCityWithTheMostPeople(List<Person> personList) {
@@ -62,6 +69,7 @@ public class PersonService {
 
         personList.stream()
                 .filter(Objects::nonNull)
+                .filter(Person.requireNonNull)
                 .forEach(person -> {
                     if (!cities.containsKey(person.getCity())) cities.put(person.getCity(), 1);
                     else cities.replace(person.getCity(), cities.get(person.getCity()) + 1);
@@ -78,6 +86,7 @@ public class PersonService {
 
         return personList.stream()
                 .filter(Objects::nonNull)
+                .filter(Person.requireNonNull)
                 .map(Person::getCity)
                 .distinct()
                 .collect(Collectors.toList());
